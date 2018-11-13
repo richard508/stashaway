@@ -4,7 +4,10 @@
   "description": "\"stashaway money for a later day\"",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"nodemon server.js\" \"cd ./client  && npm start \" ",
+    "postinstall": "cd client && npm i && npm run build"
   },
   "author": "Richard Almonte",
   "license": "ISC",
@@ -14,5 +17,8 @@
     "express": "^4.16.4",
     "mongoose": "^5.3.11",
     "morgan": "^1.9.1"
+  },
+  "engines": {
+    "node": "10.13.0"
   }
 }
