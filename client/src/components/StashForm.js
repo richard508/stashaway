@@ -8,7 +8,8 @@ class StashForm extends Component {
       total: 0,
       group: false,
       amountIn: 0
-    }
+    },
+    showEditForm: false
   }
   handleNewChange = (event) => {
     const updatedNewStash = {...this.state.newStash}
@@ -30,27 +31,39 @@ class StashForm extends Component {
 
     this.props.addToStash(payload)
   }
+  handleClick = () => {
+    this.setState({
+      showEditForm: !this.state.showEditForm
+    })
+  }
   render() {
     return (
       <div>
         <h1>{this.props.user.name}'s Stash Page</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="title">Title: </label>
-            <input onChange={this.handleNewChange} value={this.state.newStash.title} type="text" name="title"/>
+          <button onClick={this.handleClick}>
+            {this.state.showEditForm ? 'Hide' : 'Edit Sale Item'}
+          </button>
+          {this.state.showEditForm ? (
+            <div>
+            <form onSubmit={this.handleSubmit}>
+              <div>
+                <label htmlFor="title">Title: </label>
+                <input onChange={this.handleNewChange} value={this.state.newStash.title} type="text" name="title"/>
+              </div>
+              <div>
+                <label htmlFor="total">Total: </label>
+                <input onChange={this.handleNewChange} value={this.state.newStash.total} type="number" name="total"/>
+              </div>
+              <div>
+                <input onChange={this.handleNewChange} type="checkbox" name="group" />
+                <label htmlFor="group">Group Stash</label>
+              </div>
+              <button type="submit">Create Stash</button>
+            </form>
           </div>
-          <div>
-            <label htmlFor="total">Total: </label>
-            <input onChange={this.handleNewChange} value={this.state.newStash.total} type="number" name="total"/>
-          </div>
-          <div>
-            <input onChange={this.handleNewChange} type="checkbox" name="group" />
-            <label htmlFor="group">Group Stash</label>
-          </div>
-          <button type="submit">Create Stash</button>
-        </form>
-      </div>
-    );
+          ) : null}
+     </div>
+    )
   }
 }
 
