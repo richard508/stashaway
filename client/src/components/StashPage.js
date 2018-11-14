@@ -42,17 +42,25 @@ const IdeasContainerStyle = styled.div`
 class StashPage extends Component {
   state = {
     user: {},
-    stashes: []
+    stashes: [],
+    showGrouped: false,
+    filteredStash: []
   }
   componentDidMount() {
     // make an api call to get one single user
+    
     const userId = this.props.match.params.userId
     axios.get(`/api/users/${userId}`).then(res => {
+      const filtered = res.data.stashes.filter(stash => {
+        return stash.group === false
+      })
       this.setState({
         user: res.data,
-        stashes: res.data.stashes
+        stashes: res.data.stashes,
+        filteredStash: filtered
       })
     })
+    this.state.showGrouped === true ? this.notGrouped() : this.grouped()
   }
 
   addToStash = (newStash) => {
@@ -70,12 +78,16 @@ class StashPage extends Component {
     axios.delete(`/api/users/${userId}/stashes/${stashId}`).then(() => {
       //Remove the stash with stashId from this.state.stashes
       const newStashes = [...this.state.stashes]
+      const newfilteredStash = [...this.state.filteredStash]
       // Return only stashes that are NOT the id provided
+      const filteredStash = newfilteredStash.filter(stash => {
+        return stash._id !== stashId // ! = =
+      })
       const filtered = newStashes.filter(stash => {
         return stash._id !== stashId // ! = =
       })
       // Take filtered data and set it to stashes
-      this.setState({stashes: filtered})
+      this.setState({stashes: filtered, filteredStash: filteredStash})
     })
   }
   handleChange = (event, stashId) => {
@@ -102,12 +114,36 @@ class StashPage extends Component {
       console.log("Updated stash")  
     })
   }
+  toggleGroup = () => {
+    this.setState({
+      showGrouped: !this.state.showGrouped
+    })
+    this.state.showGrouped === true ? this.notGrouped() : this.grouped()
+  }
+  grouped = () => {
+    const filtered = this.state.stashes.filter( stash => {
+      return stash.group === true
+    })
+    this.setState({
+      filteredStash: filtered
+    })
+  }
+  notGrouped = () => {
+    const filtered = this.state.stashes.filter( stash => {
+      return stash.group === false
+    })
+    this.setState({
+      filteredStash: filtered
+    })
+  }
   render() {
     return (
       <div>
         <StashForm user={this.state.user} addToStash={this.addToStash}/>
+        <button onClick={this.toggleGroup}>{this.state.showGrouped == false ?
+        <span>My Personal stash</span> : <span>My Group stash</span>}</button>
         <IdeasContainerStyle>
-          {this.state.stashes.map(stash => {
+          {this.state.filteredStash.map(stash => {
             const deleteStash = () => {
               return this.handleDelete(stash._id)
             }
