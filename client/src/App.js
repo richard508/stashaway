@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import LogInPage from './components/LogInPage'
+import StashPage from './components/StashPage'
 
 const Global = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Poppins');
@@ -22,7 +23,7 @@ class App extends Component {
           {/* <NavBar /> */}
           <Switch>
             {/* <Route exact path="/login" component={LogInPage}/> */}
-            {/* <Route exact path="/users/:userId" component={IdeaPage}/> */}
+            <Route exact path="/users/:userId" component={StashPage}/>
             <Route path="/" component={LogInPage}/>
           </Switch>
         </div>
