@@ -5,7 +5,7 @@ const Stash = new Schema({
   title: String,
   total: Number,
   amountIn: Number,
-  neededBy: Date,
+  completed: { type: Boolean, default: false },
   group: Boolean,
   activities: {
     type: Schema.Types.ObjectId,
