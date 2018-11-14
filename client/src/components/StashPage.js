@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
+import StashForm from './StashForm';
 
 const IdeaStyles = styled.div`
   display: flex;
@@ -41,13 +42,7 @@ const IdeasContainerStyle = styled.div`
 class StashPage extends Component {
   state = {
     user: {},
-    stashes: [],
-    newStash:{
-      title: '',
-      total: 0,
-      group: false,
-      amountIn: 0
-    }
+    stashes: []
   }
   componentDidMount() {
     // make an api call to get one single user
@@ -60,34 +55,15 @@ class StashPage extends Component {
     })
   }
 
-  handleNewChange = (event) => {
-    const updatedNewStash = {...this.state.newStash}
-
-    // Event Target Name will be either 'Stash'
-
-    event.target.name == "group" ? 
-      updatedNewStash[event.target.name] = event.target.checked 
-    : updatedNewStash[event.target.name] = event.target.value
-    console.log(updatedNewStash)
-    this.setState({newStash: updatedNewStash})
-  }
-
-  handleSubmit = (event) => {
+  addToStash = (newStash) => {
     const userId = this.props.match.params.userId
-    event.preventDefault()
-    const payload = {
-      title: this.state.newStash.title,
-      total: this.state.newStash.total,
-      group: this.state.newStash.group,
-      amountIn: 0
-    }
-    axios.post(`/api/users/${userId}/stashes`, payload).then(res => {
+    axios.post(`/api/users/${userId}/stashes`, newStash).then(res => {
       const newStash = res.data
       const newStatenewStash = [...this.state.stashes, newStash]
       this.setState({ stashes: newStatenewStash })
     })
-    
   }
+
   handleDelete = stashId => {
     const userId = this.props.match.params.userId
     // some unique value
@@ -129,22 +105,7 @@ class StashPage extends Component {
   render() {
     return (
       <div>
-        <h1>{this.state.user.name}'s Stash Page</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="title">Title: </label>
-            <input onChange={this.handleNewChange} value={this.state.newStash.title} type="text" name="title"/>
-          </div>
-          <div>
-            <label htmlFor="total">Total: </label>
-            <input onChange={this.handleNewChange} value={this.state.newStash.total} type="number" name="total"/>
-          </div>
-          <div>
-            <input onChange={this.handleNewChange} type="checkbox" name="group" />
-            <label htmlFor="group">Group Stash</label>
-          </div>
-          <button type="submit">Create Stash</button>
-        </form>
+        <StashForm user={this.state.user} addToStash={this.addToStash}/>
         <IdeasContainerStyle>
           {this.state.stashes.map(stash => {
             const deleteStash = () => {
@@ -152,7 +113,7 @@ class StashPage extends Component {
             }
 
             return (
-              <IdeaStyles>
+              <IdeaStyles key={stash._id}>
                 <input 
                   onBlur={() => this.handleUpdate(stash._id)}
                   onChange={(event) => this.handleChange(event, stash._id)} 
