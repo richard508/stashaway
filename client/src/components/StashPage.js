@@ -111,6 +111,22 @@ class StashPage extends Component {
       console.log("Updated stash")  
     })
   }
+  // KNOWNBUGS: Page refreshes when updating
+  updateSavedStash = (stashId, event) => {
+    event.preventDefault()
+    const userId = this.props.match.params.userId
+    // Find the individual updated stash from this.state.stashes
+    const stashToUpdate = this.state.stashes.find(stash => {
+      return stash._id === stashId
+    })
+    console.log(stashToUpdate)
+    stashToUpdate.savedStash += parseInt(stashToUpdate.amountIn)
+    // axios post the endpoint with updated data
+    axios.patch(`/api/users/${userId}/stashes/${stashId}`, stashToUpdate).then(() => {
+      console.log("Updated stash")
+      this.currentNumber()
+    })
+  }
   toggleGroup = () => {
     this.setState({
       showGrouped: !this.state.showGrouped
