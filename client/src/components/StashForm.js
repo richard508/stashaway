@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Button } from 'react-bootstrap'
 
 class StashForm extends Component {
   state={
@@ -6,7 +7,8 @@ class StashForm extends Component {
       title: '',
       total: 0,
       group: false,
-      amountIn: 0
+      amountIn: 0,
+      savedStash: 0
     },
     showEditForm: false
   }
@@ -25,10 +27,21 @@ class StashForm extends Component {
       title: this.state.newStash.title,
       total: this.state.newStash.total,
       group: this.state.newStash.group,
-      amountIn: 0
+      amountIn: 0,
+      savedStash: 0
     }
 
     this.props.addToStash(payload)
+    this.setState({
+      newStash:{
+        title: '',
+        total: 0,
+        group: false,
+        amountIn: 0,
+        savedStash: 0
+      },
+      showEditForm: false
+    })
   }
   handleClick = () => {
     this.setState({
@@ -39,9 +52,9 @@ class StashForm extends Component {
     return (
       <div>
         <h2>{this.props.user.name}'s Stash Page</h2>
-          <button onClick={this.handleClick}>
+          <Button bsStyle="success" onClick={this.handleClick}>
             {this.state.showEditForm ? 'Hide' : 'Create New Stash'}
-          </button>
+          </Button>
           {this.state.showEditForm ? (
             <div>
             <form onSubmit={this.handleSubmit}>

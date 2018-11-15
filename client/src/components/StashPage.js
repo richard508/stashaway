@@ -153,14 +153,19 @@ class StashPage extends Component {
                   type="text" name="title" 
                   value={stash.title} 
                 />
-                <p>{stash.total}</p>
+                <p>{stash.savedStash}/{stash.total}</p>
+                <p>Monthly recurring amount</p>
                 <input 
                   onBlur={() => this.handleUpdate(stash._id)}
                   onChange={(event) => this.handleChange(event, stash._id)} 
                   type="number" name="amountIn" 
                   value={stash.amountIn} 
-                />
-                <button onClick={deleteStash}>X</button>
+                /> 
+                  <button className="" onClick={(event) => this.updateSavedStash(stash._id, event)}>Add Funds Now!</button>
+                <div>
+                  <button onClick={deleteStash}>Request Funds</button>
+                </div>
+                </div>
               </IdeaStyles>
             )
           })}
