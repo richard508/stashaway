@@ -66,6 +66,7 @@ class StashPage extends Component {
   addToStash = (newStash) => {
     const userId = this.props.match.params.userId
     axios.post(`/api/users/${userId}/stashes`, newStash).then(res => {
+      console.log(res)
       const newStash = res.data
       const newStatenewStash = [...this.state.stashes, newStash]
       this.setState({ stashes: newStatenewStash })
@@ -74,19 +75,15 @@ class StashPage extends Component {
 
   handleDelete = stashId => {
     const userId = this.props.match.params.userId
-    // some unique value
     axios.delete(`/api/users/${userId}/stashes/${stashId}`).then(() => {
-      //Remove the stash with stashId from this.state.stashes
       const newStashes = [...this.state.stashes]
       const newfilteredStash = [...this.state.filteredStash]
-      // Return only stashes that are NOT the id provided
       const filteredStash = newfilteredStash.filter(stash => {
-        return stash._id !== stashId // ! = =
+        return stash._id !== stashId
       })
       const filtered = newStashes.filter(stash => {
-        return stash._id !== stashId // ! = =
+        return stash._id !== stashId
       })
-      // Take filtered data and set it to stashes
       this.setState({stashes: filtered, filteredStash: filteredStash})
     })
   }

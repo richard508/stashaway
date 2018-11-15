@@ -2,6 +2,20 @@ import React, { Component } from 'react'
 import GoogleLogin from 'react-google-login'
 import axios from 'axios'
 import config from '../config.json'
+import styled from 'styled-components'
+
+const HeaderStyle = styled.div`
+   display: flex;
+   justify-content: center;
+`
+const LoginStyle = styled.div`
+   display: flex;
+   justify-content: center;
+`
+const H3Style = styled.h3`
+   display: flex;
+   justify-content: center;
+`
 class LogInPage extends Component {
   state = { 
     isAuthenticated: false,
@@ -42,13 +56,17 @@ class LogInPage extends Component {
       ) 
       : (
           <div>
-            <h1>LogIn To Stashaway</h1>
-            <GoogleLogin
-              clientId={config.GOOGLE_CLIENT_ID}
-              buttonText="Login"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-            />
+            <div>
+              <H3Style>Login with Google: </H3Style>
+              <LoginStyle>
+                <GoogleLogin
+                    clientId={config.GOOGLE_CLIENT_ID}
+                    buttonText="Google+"
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                  />
+              </LoginStyle>
+            </div>
           </div>
         )
     return (

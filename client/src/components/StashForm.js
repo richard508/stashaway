@@ -38,9 +38,9 @@ class StashForm extends Component {
   render() {
     return (
       <div>
-        <h1>{this.props.user.name}'s Stash Page</h1>
+        <h2>{this.props.user.name}'s Stash Page</h2>
           <button onClick={this.handleClick}>
-            {this.state.showEditForm ? 'Hide' : 'Edit Sale Item'}
+            {this.state.showEditForm ? 'Hide' : 'Create New Stash'}
           </button>
           {this.state.showEditForm ? (
             <div>
