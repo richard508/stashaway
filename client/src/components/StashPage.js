@@ -1,34 +1,33 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
-import StashForm from './StashForm';
+import StashForm from './StashForm'
+
+const FlexStyle = styled.div`
+display: flex;
+justify-content: center;
+`
 
 const IdeaStyles = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  width: 200px;
-  height: 200px;
+  width: 100%;
   background: #f1faee;
   margin: 10px 0;
-  button {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-  }
-
-  input,
   textarea {
     background-color: transparent;
     border: none;
   }
-
   input {
     height: 30%;
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
   textarea {
     height: 70%;
+  }
+  .stashBox{
+    padding: 10px;
   }
 `
 
@@ -154,6 +153,7 @@ class StashPage extends Component {
   }
   render() {
     return (
+      <FlexStyle>
       <div>
         <StashForm user={this.state.user} addToStash={this.addToStash}/>
         <button onClick={this.toggleGroup}>{this.state.showGrouped == false ?
@@ -165,7 +165,8 @@ class StashPage extends Component {
             }
 
             return (
-              <IdeaStyles key={stash._id}>
+              <IdeaStyles key={stash._id} className="stashBox">
+              <div className="stashBox">
                 <input 
                   onBlur={() => this.handleUpdate(stash._id)}
                   onChange={(event) => this.handleChange(event, stash._id)} 
@@ -190,6 +191,7 @@ class StashPage extends Component {
           })}
         </IdeasContainerStyle>
       </div>
+      </FlexStyle>
     );
   }
 }
