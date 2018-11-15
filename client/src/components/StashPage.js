@@ -46,9 +46,11 @@ class StashPage extends Component {
     showGrouped: false,
     filteredStash: []
   }
-  componentDidMount() {
-    // make an api call to get one single user
-    
+  async componentDidMount() {
+    await this.currentNumber()
+  }
+
+  currentNumber = () => {
     const userId = this.props.match.params.userId
     axios.get(`/api/users/${userId}`).then(res => {
       const filtered = res.data.stashes.filter(stash => {
@@ -70,6 +72,7 @@ class StashPage extends Component {
       const newStash = res.data
       const newStatenewStash = [...this.state.stashes, newStash]
       this.setState({ stashes: newStatenewStash })
+      this.currentNumber()
     })
   }
 
