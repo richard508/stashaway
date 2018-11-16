@@ -6,6 +6,9 @@ import StashForm from './StashForm'
 const FlexStyle = styled.div`
 display: flex;
 justify-content: center;
+.widthStyle{
+  width:80%
+}
 `
 
 const IdeaStyles = styled.div`
@@ -67,7 +70,6 @@ class StashPage extends Component {
   addToStash = (newStash) => {
     const userId = this.props.match.params.userId
     axios.post(`/api/users/${userId}/stashes`, newStash).then(res => {
-      console.log(res)
       const newStash = res.data
       const newStatenewStash = [...this.state.stashes, newStash]
       this.setState({ stashes: newStatenewStash })
@@ -154,7 +156,7 @@ class StashPage extends Component {
   render() {
     return (
       <FlexStyle>
-      <div>
+      <div className="widthStyle">
         <StashForm user={this.state.user} addToStash={this.addToStash}/>
         <button onClick={this.toggleGroup}>{this.state.showGrouped == false ?
         <span>My Personal stash</span> : <span>My Group stash</span>}</button>
