@@ -4,10 +4,6 @@ import axios from 'axios'
 import config from '../config.json'
 import styled from 'styled-components'
 
-const HeaderStyle = styled.div`
-   display: flex;
-   justify-content: center;
-`
 const LoginStyle = styled.div`
    display: flex;
    justify-content: center;

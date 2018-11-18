@@ -15,7 +15,7 @@ class StashForm extends Component {
   handleNewChange = (event) => {
     const updatedNewStash = {...this.state.newStash}
 
-    event.target.name == "group" ? 
+    event.target.name === "group" ? 
       updatedNewStash[event.target.name] = event.target.checked 
     : updatedNewStash[event.target.name] = event.target.value
     this.setState({newStash: updatedNewStash})
