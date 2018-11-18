@@ -46,7 +46,8 @@ class StashPage extends Component {
     user: {},
     stashes: [],
     showGrouped: false,
-    filteredStash: []
+    filteredStash: [],
+    completedStash: []
   }
   async componentDidMount() {
     await this.currentNumber()
@@ -56,15 +57,33 @@ class StashPage extends Component {
     const userId = this.props.match.params.userId
     axios.get(`/api/users/${userId}`).then(res => {
       const filtered = res.data.stashes.filter(stash => {
-        return stash.group === false
+        return stash.group === false && stash.completed === false
+      })
+      const filteredCompletes = res.data.stashes.filter(stash => {
+        return stash.completed === true
       })
       this.setState({
         user: res.data,
         stashes: res.data.stashes,
-        filteredStash: filtered
+        filteredStash: filtered,
+        completedStash: filteredCompletes
       })
     })
     this.state.showGrouped === true ? this.notGrouped() : this.grouped()
+  }
+
+  checkComplete = (userId, stashId) => {
+    // Find the individual updated stash from this.state.stashes
+    const stashToUpdate = this.state.stashes.find(stash => {
+      return stash._id === stashId
+    })
+    stashToUpdate.savedStash >= stashToUpdate.total ? 
+    stashToUpdate.completed = true 
+      : stashToUpdate.completed = false
+    
+      axios.patch(`/api/users/${userId}/stashes/${stashId}`, stashToUpdate).then((res) => {
+      console.log("Updated stash")
+    })
   }
 
   addToStash = (newStash) => {
@@ -99,7 +118,7 @@ class StashPage extends Component {
         stash[name] = value
       }
       return stash
-    }) 
+    })
 
     this.setState({stashes: updatedVals})
   }
@@ -112,7 +131,7 @@ class StashPage extends Component {
     })
     // axios post the endpoint with updated data
     axios.patch(`/api/users/${userId}/stashes/${stashId}`, stashToUpdate).then(() => {
-      console.log("Updated stash")  
+      console.log("Updated stash")
     })
   }
   // KNOWNBUGS: Page refreshes when updating
@@ -123,11 +142,11 @@ class StashPage extends Component {
     const stashToUpdate = this.state.stashes.find(stash => {
       return stash._id === stashId
     })
-    console.log(stashToUpdate)
     stashToUpdate.savedStash += parseInt(stashToUpdate.amountIn)
     // axios post the endpoint with updated data
     axios.patch(`/api/users/${userId}/stashes/${stashId}`, stashToUpdate).then(() => {
       console.log("Updated stash")
+      this.checkComplete(userId, stashId)
       this.currentNumber()
     })
   }
@@ -139,7 +158,7 @@ class StashPage extends Component {
   }
   grouped = () => {
     const filtered = this.state.stashes.filter( stash => {
-      return stash.group === true
+      return stash.group === true && stash.completed === false
     })
     this.setState({
       filteredStash: filtered
@@ -147,7 +166,7 @@ class StashPage extends Component {
   }
   notGrouped = () => {
     const filtered = this.state.stashes.filter( stash => {
-      return stash.group === false
+      return stash.group === false && stash.completed === false
     })
     this.setState({
       filteredStash: filtered
@@ -158,7 +177,7 @@ class StashPage extends Component {
       <FlexStyle>
       <div className="widthStyle">
         <StashForm user={this.state.user} addToStash={this.addToStash}/>
-        <button onClick={this.toggleGroup}>{this.state.showGrouped == false ?
+        <button onClick={this.toggleGroup}>{this.state.showGrouped === false ?
         <span>My Personal stash</span> : <span>My Group stash</span>}</button>
         <IdeasContainerStyle>
           {this.state.filteredStash.map(stash => {
@@ -188,6 +207,20 @@ class StashPage extends Component {
                   <button onClick={deleteStash}>Request Funds</button>
                 </div>
                 </div>
+              </IdeaStyles>
+            )
+          })}
+          {this.state.completedStash.map(stash => {
+            const deleteStash = () => {
+              return this.handleDelete(stash._id)
+            }
+
+            return (
+              <IdeaStyles key={stash._id} className="stashBox">
+              <div style={{backgroundColor: '#4aee64'}} className="stashBox">
+                <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
+                <button style={{float: 'right'}} onClick={deleteStash}>Request Funds</button>
+              </div>
               </IdeaStyles>
             )
           })}
