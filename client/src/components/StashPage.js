@@ -54,7 +54,8 @@ class StashPage extends Component {
     filteredStash: [],
     requestedStash: [],
     completedStash: [],
-    show: false
+    failedAlert: false,
+    successAlert: false
   }
   async componentDidMount() {
     await this.currentNumber()
@@ -203,7 +204,9 @@ class StashPage extends Component {
       this.setState({
         stashes: filtered, 
         filteredStash: filteredStash, 
-        requestedStash: newRquestedStash
+        requestedStash: newRquestedStash,
+        successAlert: false,
+        failedAlert: false
       })
       this.currentNumber()
     })
@@ -225,7 +228,15 @@ class StashPage extends Component {
                 <StashStyles key={stash._id} className="stashBox">
                 <div style={{backgroundColor: '#4aee64'}} className="stashBox">
                   <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
-                  <button className="btn success" style={{float: 'right'}} onClick={requestStash}>Request Funds</button>
+                  <button className="btn success" style={{float: 'right'}} onClick={() => this.setState({ successAlert: true })}>Request Funds</button>
+                  <SweetAlert
+                    show={this.state.successAlert}
+                    title="Are you sure?"
+                    text="You won't be able to revert this!"
+                    type='warning'
+                    showCancelButton
+                    onConfirm={requestStash}
+                  />
                 </div>
                 </StashStyles>
               )
@@ -254,9 +265,9 @@ class StashPage extends Component {
                 /> 
                   <button className="btn success" onClick={(event) => this.updateSavedStash(stash._id, event)}>Add Funds Now!</button>
                 <div>
-                  <button className="btn warning" onClick={() => this.setState({ show: true })}>Request Funds</button>
+                  <button className="btn warning" onClick={() => this.setState({ failedAlert: true })}>Request Funds</button>
                   <SweetAlert
-                    show={this.state.show}
+                    show={this.state.failedAlert}
                     title="Are you sure?"
                     text="You won't be able to revert this! A 15% penalty will be charged!"
                     type='warning'
