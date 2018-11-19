@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import StashForm from './StashForm'
+import SweetAlert from 'sweetalert2-react'
 import '../css/button.css'
 import '../css/form.css'
 
@@ -52,7 +53,8 @@ class StashPage extends Component {
     showGrouped: false,
     filteredStash: [],
     requestedStash: [],
-    completedStash: []
+    completedStash: [],
+    show: false
   }
   async componentDidMount() {
     await this.currentNumber()
@@ -252,7 +254,15 @@ class StashPage extends Component {
                 /> 
                   <button className="btn success" onClick={(event) => this.updateSavedStash(stash._id, event)}>Add Funds Now!</button>
                 <div>
-                  <button className="btn warning" onClick={requestStash}>Request Funds</button>
+                  <button className="btn warning" onClick={() => this.setState({ show: true })}>Request Funds</button>
+                  <SweetAlert
+                    show={this.state.show}
+                    title="Are you sure?"
+                    text="You won't be able to revert this! A 15% penalty will be charged!"
+                    type='warning'
+                    showCancelButton
+                    onConfirm={requestStash}
+                  />
                 </div>
                 </div>
               </StashStyles>
