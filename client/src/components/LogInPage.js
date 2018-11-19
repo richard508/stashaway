@@ -17,6 +17,7 @@ class LogInPage extends Component {
     user: null,
     token: ''
   }
+
   logout = () => {
     this.setState({
       isAuthenticated: false, 
@@ -24,7 +25,6 @@ class LogInPage extends Component {
       token: ''
     })
   }
-
   signup(response){ 
     axios.post('/api/users/',response.profileObj).then(res => {
       console.log(res)
@@ -32,11 +32,25 @@ class LogInPage extends Component {
       this.props.history.push(`/users/${res.data._id}`)
     })
   }
+
+  doesUserExist = (response) => {
+    axios.get('/api/users/').then(res => {
+      const requestedUser = res.data.find(user => {
+        return user.googleId === response.profileObj.googleId
+      })
+      if(requestedUser !== undefined){ 
+        this.setState({isAuthenticated: true, user: res})
+        this.props.history.push(`/users/${requestedUser._id}`)
+      } else {
+        this.signup(response)
+      }
+    })
+  }
   render() {
     const responseGoogle = (response) => {
-      console.log(response)
-      this.signup(response)
+      this.doesUserExist(response)
     }
+
     let content = !!this.state.isAuthenticated ?
       (
         <div>
