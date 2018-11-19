@@ -47,6 +47,7 @@ class StashPage extends Component {
     stashes: [],
     showGrouped: false,
     filteredStash: [],
+    requestedStash: [],
     completedStash: []
   }
   async componentDidMount() {
@@ -57,16 +58,20 @@ class StashPage extends Component {
     const userId = this.props.match.params.userId
     axios.get(`/api/users/${userId}`).then(res => {
       const filtered = res.data.stashes.filter(stash => {
-        return stash.group === false && stash.completed === false
+        return stash.group === false && stash.completed === false && stash.requested === false
       })
       const filteredCompletes = res.data.stashes.filter(stash => {
-        return stash.completed === true
+        return stash.completed === true && stash.requested === false
+      })
+      const requestedStash = res.data.stashes.filter(stash => {
+        return stash.requested === true
       })
       this.setState({
         user: res.data,
         stashes: res.data.stashes,
         filteredStash: filtered,
-        completedStash: filteredCompletes
+        completedStash: filteredCompletes,
+        requestedStash: requestedStash
       })
     })
     this.state.showGrouped === true ? this.notGrouped() : this.grouped()
@@ -158,7 +163,7 @@ class StashPage extends Component {
   }
   grouped = () => {
     const filtered = this.state.stashes.filter( stash => {
-      return stash.group === true && stash.completed === false
+      return stash.group === true && stash.completed === false && stash.requested === false
     })
     this.setState({
       filteredStash: filtered
@@ -166,10 +171,35 @@ class StashPage extends Component {
   }
   notGrouped = () => {
     const filtered = this.state.stashes.filter( stash => {
-      return stash.group === false && stash.completed === false
+      return stash.group === false && stash.completed === false && stash.requested === false
     })
     this.setState({
       filteredStash: filtered
+    })
+  }
+
+  handleRequest = (stashId) => {
+    const userId = this.props.match.params.userId
+    const stashToUpdate = this.state.stashes.find(stash => {
+      return stash._id === stashId
+    })
+    stashToUpdate.requested = true
+    axios.patch(`/api/users/${userId}/stashes/${stashId}`, stashToUpdate).then((res) => {
+      const removeStash = [...this.state.stashes]
+      const removeFilteredStash = [...this.state.filteredStash]
+      const newRquestedStash = [...this.state.requestedStash, res.data]
+      const filteredStash = removeFilteredStash.filter(stash => {
+        return stash._id !== stashId
+      })
+      const filtered = removeStash.filter(stash => {
+        return stash._id !== stashId
+      })
+      this.setState({
+        stashes: filtered, 
+        filteredStash: filteredStash, 
+        requestedStash: newRquestedStash
+      })
+      this.currentNumber()
     })
   }
   render() {
@@ -180,6 +210,20 @@ class StashPage extends Component {
         <button onClick={this.toggleGroup}>{this.state.showGrouped === false ?
         <span>My Personal stash</span> : <span>My Group stash</span>}</button>
         <IdeasContainerStyle>
+          {this.state.completedStash.map(stash => {
+              const requestStash = () => {
+                return this.handleRequest(stash._id)
+              }
+
+              return (
+                <IdeaStyles key={stash._id} className="stashBox">
+                <div style={{backgroundColor: '#4aee64'}} className="stashBox">
+                  <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
+                  <button style={{float: 'right'}} onClick={requestStash}>Request Funds</button>
+                </div>
+                </IdeaStyles>
+              )
+            })}
           {this.state.filteredStash.map(stash => {
             const deleteStash = () => {
               return this.handleDelete(stash._id)
@@ -210,16 +254,12 @@ class StashPage extends Component {
               </IdeaStyles>
             )
           })}
-          {this.state.completedStash.map(stash => {
-            const deleteStash = () => {
-              return this.handleDelete(stash._id)
-            }
-
+          {this.state.requestedStash.map(stash => {
             return (
               <IdeaStyles key={stash._id} className="stashBox">
-              <div style={{backgroundColor: '#4aee64'}} className="stashBox">
+              <div style={{backgroundColor: '#0ff'}} className="stashBox">
                 <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
-                <button style={{float: 'right'}} onClick={deleteStash}>Request Funds</button>
+                <button style={{float: 'right'}} disabled>Funds Requested</button>
               </div>
               </IdeaStyles>
             )
