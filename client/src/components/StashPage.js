@@ -23,6 +23,7 @@ const StashStyles = styled.div`
   background: #f1faee;
   margin: 10px 0;
   border-radius: 10px;
+  box-shadow: 5px 5px 5px #d4d4d4;
   textarea {
     background-color: transparent;
     border: none;
