@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import GoogleLogin from 'react-google-login'
 import axios from 'axios'
-import config from '../config.json'
 import styled from 'styled-components'
 
 const LoginStyle = styled.div`
@@ -56,7 +55,7 @@ class LogInPage extends Component {
               <H3Style>Login with Google: </H3Style>
               <LoginStyle>
                 <GoogleLogin
-                    clientId={config.GOOGLE_CLIENT_ID}
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                     buttonText="Google+"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
