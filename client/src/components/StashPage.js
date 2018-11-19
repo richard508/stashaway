@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import StashForm from './StashForm'
+import '../css/button.css'
+import '../css/form.css'
+
 
 const FlexStyle = styled.div`
 display: flex;
@@ -11,13 +14,14 @@ justify-content: center;
 }
 `
 
-const IdeaStyles = styled.div`
+const StashStyles = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
   width: 100%;
   background: #f1faee;
   margin: 10px 0;
+  border-radius: 10px;
   textarea {
     background-color: transparent;
     border: none;
@@ -34,7 +38,7 @@ const IdeaStyles = styled.div`
   }
 `
 
-const IdeasContainerStyle = styled.div`
+const StashsContainerStyle = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -207,30 +211,30 @@ class StashPage extends Component {
       <FlexStyle>
       <div className="widthStyle">
         <StashForm user={this.state.user} addToStash={this.addToStash}/>
-        <button onClick={this.toggleGroup}>{this.state.showGrouped === false ?
+        <button className="btn topMargin" onClick={this.toggleGroup}>{this.state.showGrouped === false ?
         <span>My Personal stash</span> : <span>My Group stash</span>}</button>
-        <IdeasContainerStyle>
+        <StashsContainerStyle>
           {this.state.completedStash.map(stash => {
               const requestStash = () => {
                 return this.handleRequest(stash._id)
               }
 
               return (
-                <IdeaStyles key={stash._id} className="stashBox">
+                <StashStyles key={stash._id} className="stashBox">
                 <div style={{backgroundColor: '#4aee64'}} className="stashBox">
                   <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
-                  <button style={{float: 'right'}} onClick={requestStash}>Request Funds</button>
+                  <button className="btn success" style={{float: 'right'}} onClick={requestStash}>Request Funds</button>
                 </div>
-                </IdeaStyles>
+                </StashStyles>
               )
             })}
           {this.state.filteredStash.map(stash => {
-            const deleteStash = () => {
-              return this.handleDelete(stash._id)
+            const requestStash = () => {
+              return this.handleRequest(stash._id)
             }
 
             return (
-              <IdeaStyles key={stash._id} className="stashBox">
+              <StashStyles key={stash._id} className="stashBox">
               <div className="stashBox">
                 <input 
                   onBlur={() => this.handleUpdate(stash._id)}
@@ -240,31 +244,31 @@ class StashPage extends Component {
                 />
                 <p>{stash.savedStash}/{stash.total}</p>
                 <p>Monthly recurring amount</p>
-                <input 
+                <input className="formControl bottomMargin"
                   onBlur={() => this.handleUpdate(stash._id)}
                   onChange={(event) => this.handleChange(event, stash._id)} 
                   type="number" name="amountIn" 
                   value={stash.amountIn} 
                 /> 
-                  <button className="" onClick={(event) => this.updateSavedStash(stash._id, event)}>Add Funds Now!</button>
+                  <button className="btn success" onClick={(event) => this.updateSavedStash(stash._id, event)}>Add Funds Now!</button>
                 <div>
-                  <button onClick={deleteStash}>Request Funds</button>
+                  <button className="btn warning" onClick={requestStash}>Request Funds</button>
                 </div>
                 </div>
-              </IdeaStyles>
+              </StashStyles>
             )
           })}
           {this.state.requestedStash.map(stash => {
             return (
-              <IdeaStyles key={stash._id} className="stashBox">
-              <div style={{backgroundColor: '#0ff'}} className="stashBox">
+              <StashStyles key={stash._id} className="stashBox">
+              <div style={stash.completed ? {backgroundColor: '#166d8a'} : {backgroundColor: '#620e05', color: '#FFAEAE'}} className="stashBox">
                 <span><strong>{stash.title}:</strong></span> Funded: {stash.savedStash}/{stash.total} 
-                <button style={{float: 'right'}} disabled>Funds Requested</button>
+                <button className="btn default disabled" style={{float: 'right'}} disabled>Funds Requested</button>
               </div>
-              </IdeaStyles>
+              </StashStyles>
             )
           })}
-        </IdeasContainerStyle>
+        </StashsContainerStyle>
       </div>
       </FlexStyle>
     );
