@@ -12,7 +12,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background: #A8DADC;
+  background: #A0C3DB;
 }
 `
 class App extends Component {

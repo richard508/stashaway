@@ -12,3 +12,11 @@
   transition: border-color .15s;
   margin-right: 10px;
 }
+
+.backgroundColor{
+  background: #6B9CBB;
+}
+
+.borderRadius{
+  border-radius: 10px;
+}

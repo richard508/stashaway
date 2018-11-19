@@ -58,7 +58,7 @@ class StashForm extends Component {
             {this.state.showEditForm ? 'Hide' : 'Create New Stash'}
           </Button>
           {this.state.showEditForm ? (
-            <div className="form">
+            <div className="form backgroundColor borderRadius">
             <form onSubmit={this.handleSubmit}>
               <div>
                 <label htmlFor="title">Title: </label>
@@ -72,7 +72,7 @@ class StashForm extends Component {
                 <input onChange={this.handleNewChange} type="checkbox" name="group" />
                 <label htmlFor="group">Group Stash</label>
               </div>
-              <button type="submit">Create Stash</button>
+              <button className="btn success" type="submit">Create Stash</button>
             </form>
           </div>
           ) : null}
