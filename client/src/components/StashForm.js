@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
+import '../css/button.css'
+import '../css/form.css'
 
 class StashForm extends Component {
   state={
@@ -56,15 +58,15 @@ class StashForm extends Component {
             {this.state.showEditForm ? 'Hide' : 'Create New Stash'}
           </Button>
           {this.state.showEditForm ? (
-            <div>
+            <div className="form">
             <form onSubmit={this.handleSubmit}>
               <div>
                 <label htmlFor="title">Title: </label>
-                <input onChange={this.handleNewChange} value={this.state.newStash.title} type="text" name="title"/>
+                <input className="formControl bottomMargin" onChange={this.handleNewChange} value={this.state.newStash.title} type="text" name="title"/>
               </div>
               <div>
                 <label htmlFor="total">Total: </label>
-                <input onChange={this.handleNewChange} value={this.state.newStash.total} type="number" name="total"/>
+                <input className="formControl bottomMargin" onChange={this.handleNewChange} value={this.state.newStash.total} type="number" name="total"/>
               </div>
               <div>
                 <input onChange={this.handleNewChange} type="checkbox" name="group" />
