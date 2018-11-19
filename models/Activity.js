@@ -5,4 +5,4 @@ const Activity = new Schema({
   description: String
 })
 
-module.exports = mongoose.model('Chat', Chat)
+module.exports = mongoose.model('Activity', Activity)
