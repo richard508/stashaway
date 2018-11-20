@@ -6,7 +6,7 @@ const NavBarStyles = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #195073;
+  background: #0a0f20;
   height: 50px;
   
   a {
@@ -23,13 +23,24 @@ const NavBarStyles = styled.div`
     display: flex;
     justify-content: space-around;
   }
+  .logo{
+    margin-left: 10px;
+    padding: 5px;
+    color: #8398d9;
+    font-weight: bold;
+    font-size: 20px;
+    border: 1px solid #8398d9;
+  }
 `
 
 class NavBar extends Component {
   render() {
     return (
       <NavBarStyles id="nav-container">
-        <Link to="/">StashAway</Link>
+        <p className="logo">STASHaWAY</p>
+        <div className="right">
+          <Link to="/">Logout</Link>
+        </div>
       </NavBarStyles>
     );
   }
