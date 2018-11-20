@@ -69,7 +69,7 @@ class LogInPage extends Component {
               <H3Style>Login with Google: </H3Style>
               <LoginStyle>
                 <GoogleLogin
-                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                    clientId="690444099886-97p0viqlgr4b2b7p55ri50o520pg0aea.apps.googleusercontent.com"
                     buttonText="Google+"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
