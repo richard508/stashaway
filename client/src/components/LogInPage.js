@@ -26,14 +26,15 @@ class LogInPage extends Component {
     })
   }
   signup(response){ 
-    axios.post('/api/users/',response.profileObj).then(res => {
+    axios.post('/api/users',response.profileObj).then(res => {
       this.setState({isAuthenticated: true, user: res})
       this.props.history.push(`/users/${res.data._id}`)
     })
   }
 
   doesUserExist = (response) => {
-    axios.get('/api/users/').then(res => {
+    axios.get('/api/users').then(res => {
+      console.log(res)
       const requestedUser = res.data.find(user => {
         return user.googleId === response.profileObj.googleId
       })
