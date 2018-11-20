@@ -27,7 +27,6 @@ class LogInPage extends Component {
   }
   signup(response){ 
     axios.post('/api/users/',response.profileObj).then(res => {
-      console.log(res)
       this.setState({isAuthenticated: true, user: res})
       this.props.history.push(`/users/${res.data._id}`)
     })
