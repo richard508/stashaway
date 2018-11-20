@@ -9,7 +9,7 @@ For project #3, I created an app that helps people stash money for things they w
 
   * Languages - HTML5, CSS3, Sass, Javascript, React, Nodejs, Express
   * Design - Google Fonts, SweetAlert, Bootstrap
-  * Project Planning & User Stories - [Trello](https://trello.com/b/kWLDqUHn/trendsters)
+  * Project Planning & User Stories - [Trello](https://trello.com/b/r6GD7zJ7/stashaway)
   * Atom and Visual Studio Code
 
 
