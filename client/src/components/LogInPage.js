@@ -34,7 +34,6 @@ class LogInPage extends Component {
 
   doesUserExist = (response) => {
     axios.get('/api/users').then(res => {
-      console.log(res)
       const requestedUser = res.data.find(user => {
         return user.googleId === response.profileObj.googleId
       })
