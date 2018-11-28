@@ -27,7 +27,7 @@ Stripe: Not easy to setup payment plans. Recommend a team for the many security 
 ## Wireframe
 
 ![Wireframe]
-(https://www.lucidchart.com/invitations/accept/da720f62-db6b-4918-b071-7b826a029f8a)
+(https://www.lucidchart.com/invitations/accept/b6f10321-64a9-4608-b626-368f8aba6fcc)
 
 ## Future Development
 
